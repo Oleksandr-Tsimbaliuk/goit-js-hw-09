@@ -17,3 +17,43 @@ img {
   max-width: 100%;
 }
 
+button {
+  padding: 3px 10px;
+  background-color: #6321af;
+  color: #fff;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: #7700ff;
+}
+
+button[disabled] {
+  background-color: #888;
+  color: #ddd;
+}
+
+.timer {
+  gap: 20px;
+  margin-top: 18px;
+  display: flex;
+}
+
+.field {
+  text-align: center;
+  border: 1px #212121 solid;
+  border-radius: 5px;
+  background-color: #6a06dd;
+  color: #fff;
+  padding: 0px 5px 0px 5px;
+}
+
+.value {
+  border: none;
+  border-radius: 5px;
+  /* background-color: #6a06dd;
+  color: #fff; */
+}

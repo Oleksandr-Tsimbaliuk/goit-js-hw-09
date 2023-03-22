@@ -11,10 +11,8 @@ const refs = {
 };
 
 refs.btnStart.addEventListener('click', onBtnStart);
-
 let futureDate = null;
 refs.btnStart.disabled = true;
-// refs.btnStart.setAttribute('disabled', 'true');
 
 const options = {
   enableTime: true,
@@ -27,7 +25,6 @@ const options = {
       return Notiflix.Notify.failure('Please choose a date in the future');
     }
     refs.btnStart.disabled = false;
-    // refs.btnStart.removeAttribute('disabled');
   },
 };
 
