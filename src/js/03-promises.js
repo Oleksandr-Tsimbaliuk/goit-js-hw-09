@@ -1,6 +1,5 @@
 import Notiflix from 'notiflix';
 
-let amountCounter = 0;
 const refs = {
   form: document.querySelector('.form'),
   delay: document.querySelector('[name=delay]'),
@@ -13,45 +12,45 @@ refs.form.addEventListener('submit', onFormSubmit);
 function onFormSubmit(event) {
   event.preventDefault();
   let delayValue = Number(refs.delay.value);
-  let stepValue = Number(refs.step.value);
-  let amountValue = Number(refs.amount.value);
-
-  const intervalId = setInterval(() => {
-    amountCounter += 1;
-    if (amountCounter > amountValue) {
-      clearInterval(intervalId);
-      return;
-    }
-    createPromise(amountCounter, delayValue)
-      .then(message => Notiflix.Notify.success(message))
-      .catch(message => Notiflix.Notify.failure(message));
-    // stepValue += delayValue;
+  const stepValue = Number(refs.step.value);
+  const amountValue = Number(refs.amount.value);
+  for (let i = 1; i <= amountValue; i += 1) {
+    createPromise(i, delayValue)
+      .then(({ position, delay }) => {
+        Notiflix.Notify.success(
+          `✅ Fulfilled promise ${position} in ${delay}ms`
+        );
+      })
+      .catch(({ position, delay }) => {
+        Notiflix.Notify.failure(
+          `❌ Rejected promise ${position} in ${delay}ms`
+        );
+      });
     delayValue += stepValue;
-    console.log(delayValue);
-    console.log(stepValue);
-    console.log(amountValue);
-  }, delayValue);
-
-  console.log(delayValue);
-  console.log(stepValue);
-  console.log(amountValue);
+  }
 }
 
 function createPromise(position, delay) {
   const shouldResolve = Math.random() > 0.3;
-
   return new Promise((resolve, reject) => {
-    setInterval(() => {
+    setTimeout(() => {
       if (shouldResolve) {
-        resolve(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        resolve({
+          position,
+          delay,
+        });
       } else {
-        reject(`❌ Rejected promise ${position} in ${delay}ms`);
+        reject({
+          position,
+          delay,
+        });
       }
     }, delay);
   });
 }
 
-// let amountCounter = 0;
+// import Notiflix from 'notiflix';
+
 // const refs = {
 //   form: document.querySelector('.form'),
 //   delay: document.querySelector('[name=delay]'),
@@ -59,27 +58,26 @@ function createPromise(position, delay) {
 //   amount: document.querySelector('[name=amount]'),
 // };
 
+// let amountCounter = 0;
 // refs.form.addEventListener('submit', onFormSubmit);
 
 // function onFormSubmit(event) {
 //   event.preventDefault();
 //   let delayValue = Number(refs.delay.value);
 //   let stepValue = Number(refs.step.value);
+//   let amountValue = Number(refs.amount.value);
 
 //   const intervalId = setInterval(() => {
 //     amountCounter += 1;
-
-//     if (amountCounter > refs.amount.value) {
+//     if (amountCounter > amountValue) {
 //       clearInterval(intervalId);
 //       return;
-//     } else {
-//       createPromise(amountCounter, delayValue)
-//         .then(message => Notiflix.Notify.success(message))
-//         .catch(message => Notiflix.Notify.failure(message));
 //     }
+//     createPromise(amountCounter, delayValue)
+//       .then(message => Notiflix.Notify.success(message))
+//       .catch(message => Notiflix.Notify.failure(message));
 //     delayValue += stepValue;
-//   }, delayValue);
-//   console.log(delayValue);
+//   }, stepValue);
 // }
 
 // function createPromise(position, delay) {

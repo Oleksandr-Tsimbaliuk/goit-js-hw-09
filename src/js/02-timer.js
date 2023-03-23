@@ -1,6 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import Notiflix from 'notiflix';
+import Notiflix, { Loading } from 'notiflix';
 
 const refs = {
   btnStart: document.querySelector('[data-start]'),
@@ -11,6 +11,7 @@ const refs = {
 };
 
 refs.btnStart.addEventListener('click', onBtnStart);
+
 let futureDate = null;
 refs.btnStart.disabled = true;
 
@@ -20,15 +21,24 @@ const options = {
   defaultDate: Date.now(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    futureDate = selectedDates[0].getTime();
     if (selectedDates[0] <= Date.now()) {
+      refs.btnStart.disabled = true;
       return Notiflix.Notify.failure('Please choose a date in the future');
     }
     refs.btnStart.disabled = false;
+    localStorage.setItem('selectedFutureDate', Date.parse(selectedDates[0]));
   },
 };
 
 flatpickr('#datetime-picker', options);
+
+function onBtnStart() {
+  const getfutureDateStorage = localStorage.getItem('selectedFutureDate');
+  let futureDateStorageParsed = JSON.parse(getfutureDateStorage);
+  futureDate = futureDateStorageParsed;
+  refs.btnStart.disabled = true;
+  timer.start();
+}
 
 const timer = {
   start() {
@@ -40,7 +50,7 @@ const timer = {
       refs.hoursSpan.textContent = hours;
       refs.minutesSpan.textContent = minutes;
       refs.secondsSpan.textContent = seconds;
-      console.log(`${days}:${hours}:${minutes}:${seconds}`);
+      // console.log(`${days}:${hours}:${minutes}:${seconds}`);
 
       if (timeLeft < 1000) {
         clearInterval(timerId);
@@ -49,11 +59,6 @@ const timer = {
     }, 1000);
   },
 };
-
-function onBtnStart() {
-  timer.start();
-  refs.btnStart.disabled = true;
-}
 
 function convertMs(timeLeft) {
   const second = 1000;
